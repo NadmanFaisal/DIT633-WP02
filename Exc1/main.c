@@ -13,9 +13,9 @@ typedef struct ROBOT {
     enum DIRECTION dir;
 };
 
-void turn (char *turn);
+void turn (struct ROBOT *robot);
 
-void move(char *move);
+void move(struct ROBOT *robot);
 
 void clearBuffer(void) {
     char input;
