@@ -13,6 +13,10 @@ typedef struct ROBOT {
     enum DIRECTION dir;
 };
 
+void turn (char *turn);
+
+void move(char *move);
+
 void clearBuffer(void) {
     char input;
     while((input = getchar()) != '\n' && input != EOF);
@@ -31,7 +35,8 @@ int main(int argc, char *argv[]) {
     scanf("%d", &userY);
     clearBuffer();
 
-    struct ROBOT myRobot = {userX, userY, 1};
+    enum DIRECTION direction = N;
+    struct ROBOT myRobot = {userX, userY, direction};
 
     printf("\n");
     printf("==================ROBOT-COMPLETE==================\n");
@@ -39,5 +44,20 @@ int main(int argc, char *argv[]) {
 
     printf("Robot starting x: %d\n", myRobot.xpos);
     printf("Robot starting y: %d\n", myRobot.ypos);
+    printf("Robot directionx: %d\n", myRobot.dir);
+
+    printf("==================MANIPULATING-ROBOT-DATA==================\n");
+
+    int *pXpos = &myRobot.xpos;
+    int *pYpos = &myRobot.ypos;
+
+    *pXpos = 14;
+    *pYpos = 15;
+
+    printf("Robot x-pos address: %p\n", pXpos);
+    printf("Robot y-pos address: %p\n", pYpos);
+
+    printf("Robot x-pos new value: %d\n", *pXpos);
+    printf("Robot y-pos new value: %d\n", *pYpos);
 
 }
