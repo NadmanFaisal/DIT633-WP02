@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+
+/*
+N -> North
+O -> East
+S -> South
+W -> West*/
 enum DIRECTION {
     N = 1,
     O = 2,
@@ -14,8 +20,23 @@ typedef struct ROBOT {
 };
 
 void turn (struct ROBOT *robot){
-    int *px = &robot->xpos;
-    printf("x-pos Data inside robot:%d\n", *px);
+    enum DIRECTION new_dir;
+    enum DIRECTION *pRobot_dir = &robot->dir;
+
+    if(*pRobot_dir == 1) {
+        new_dir = O;
+        *pRobot_dir = new_dir;
+    } else if(*pRobot_dir == 2) {
+        new_dir = S;
+        *pRobot_dir = new_dir;
+    } else if(*pRobot_dir == 3) {
+        new_dir = W;
+        *pRobot_dir = new_dir;
+    } else {
+        new_dir = N;
+        *pRobot_dir = new_dir;
+    }
+
 }
 
 void move(struct ROBOT *robot);
@@ -61,10 +82,10 @@ int main(int argc, char *argv[]) {
 
         if(movement == 't') {
             printf("Robot has been turned!\n");
-            // turn(&pMy_robot);
+            turn(pMy_robot);
         } else if(movement == 'm') {
             printf("Robot has been moved!\n");
-            // move(&pMy_robot);
+            // move(pMy_robot);
         } else if(movement == end_char) {
             printf("Program terminated!\n");
             return 0;
