@@ -21,19 +21,20 @@ typedef struct ROBOT {
 
 void turn (struct ROBOT *robot){
     enum DIRECTION new_dir;
+    enum DIRECTION *pNew_dir = &new_dir;
     enum DIRECTION *pRobot_dir = &robot->dir;
 
     if(*pRobot_dir == 1) {
-        new_dir = O;
+        *pNew_dir = O;
         *pRobot_dir = new_dir;
     } else if(*pRobot_dir == 2) {
-        new_dir = S;
+        *pNew_dir = S;
         *pRobot_dir = new_dir;
     } else if(*pRobot_dir == 3) {
-        new_dir = W;
+        *pNew_dir = W;
         *pRobot_dir = new_dir;
     } else {
-        new_dir = N;
+        *pNew_dir = N;
         *pRobot_dir = new_dir;
     }
 
@@ -98,11 +99,17 @@ int main(int argc, char *argv[]) {
             printf("Robot has been turned!\n");
             turn(pMy_robot);
             printf("New robot direction: %d\n", pMy_robot->dir);
+            printf("\n");
         } else if(movement == 'm') {
             printf("Robot has been moved!\n");
             move(pMy_robot);
+            if(pMy_robot->xpos > 99 || pMy_robot->xpos < 0 || pMy_robot->ypos > 99 || pMy_robot->ypos < 0) {
+                printf("Robot out of bounds. Program terminated.\n");
+                return 0;
+            }
             printf("New robot x-pos: %d\n", pMy_robot->xpos);
             printf("New robot y-pos: %d\n", pMy_robot->ypos);
+            printf("\n");
         } else if(movement == end_char) {
             printf("Program terminated!\n");
             return 0;
