@@ -39,7 +39,21 @@ void turn (struct ROBOT *robot){
 
 }
 
-void move(struct ROBOT *robot);
+void move(struct ROBOT *robot) {
+    enum DIRECTION *robot_dir = &robot->dir;
+    int *robot_x = &robot->xpos;
+    int *robot_y = &robot->ypos;
+
+    if(*robot_dir == 1) {
+        ++*robot_x;
+    } else if(*robot_dir == 3) {
+        --*robot_x;
+    } else if(*robot_dir == 2) {
+        ++*robot_y;
+    } else {
+        --*robot_y;
+    }
+}
 
 void clearBuffer(void) {
     char input;
@@ -83,9 +97,12 @@ int main(int argc, char *argv[]) {
         if(movement == 't') {
             printf("Robot has been turned!\n");
             turn(pMy_robot);
+            printf("New robot direction: %d\n", pMy_robot->dir);
         } else if(movement == 'm') {
             printf("Robot has been moved!\n");
-            // move(pMy_robot);
+            move(pMy_robot);
+            printf("New robot x-pos: %d\n", pMy_robot->xpos);
+            printf("New robot y-pos: %d\n", pMy_robot->ypos);
         } else if(movement == end_char) {
             printf("Program terminated!\n");
             return 0;
