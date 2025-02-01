@@ -13,7 +13,10 @@ typedef struct ROBOT {
     enum DIRECTION dir;
 };
 
-void turn (struct ROBOT *robot);
+void turn (struct ROBOT *robot){
+    int *px = &robot->xpos;
+    printf("x-pos Data inside robot:%d\n", *px);
+}
 
 void move(struct ROBOT *robot);
 
@@ -24,40 +27,52 @@ void clearBuffer(void) {
 
 int main(int argc, char *argv[]) {
     
-    int userX;
-    int userY;
+    int user_x;
+    int user_y;
+    char movement = 'm';
+    char end_char = 'x';
 
-    printf("Provide starting x-coordinate: ");
-    scanf("%d", &userX);
+    printf("Type in the starting x-pos: ");
+    scanf("%d", &user_x);
     clearBuffer();
 
-    printf("Provide starting y-coordinate: ");
-    scanf("%d", &userY);
+    printf("Type in the starting y-pos: ");
+    scanf("%d", &user_y);
     clearBuffer();
-
+    
     enum DIRECTION direction = N;
-    struct ROBOT myRobot = {userX, userY, direction};
+    struct ROBOT my_robot = {user_x, user_y, direction};
 
     printf("\n");
-    printf("==================ROBOT-COMPLETE==================\n");
+    printf("=================ROBOT-CREATED=================\n");
     printf("\n");
 
-    printf("Robot starting x: %d\n", myRobot.xpos);
-    printf("Robot starting y: %d\n", myRobot.ypos);
-    printf("Robot directionx: %d\n", myRobot.dir);
+    struct ROBOT *pMy_robot = &my_robot;
 
-    printf("==================MANIPULATING-ROBOT-DATA==================\n");
+    printf("Robot x-pos: %d\n", pMy_robot->xpos);
+    printf("Robot y-pos: %d\n", pMy_robot->ypos);
+    printf("Robot direction: %d\n", pMy_robot->dir);
+    printf("\n");
 
-    int *pXpos = &myRobot.xpos;
-    int *pYpos = &myRobot.ypos;
+    while(movement != end_char) {
+        printf("Write 'm' to move, or 't' to turn robot: ");
+        scanf("%c", &movement);
+        clearBuffer();
 
-    *pXpos = 14;
-    *pYpos = 15;
+        if(movement == 't') {
+            printf("Robot has been turned!\n");
+            // turn(&pMy_robot);
+        } else if(movement == 'm') {
+            printf("Robot has been moved!\n");
+            // move(&pMy_robot);
+        } else if(movement == end_char) {
+            printf("Program terminated!\n");
+            return 0;
+        } else {
+            printf("Invalid input.\n");
+            return 0;
+        }
+    }
 
-    printf("Robot x-pos address: %p\n", pXpos);
-    printf("Robot y-pos address: %p\n", pYpos);
-
-    printf("Robot x-pos new value: %d\n", *pXpos);
-    printf("Robot y-pos new value: %d\n", *pYpos);
-
+    return 0;
 }
