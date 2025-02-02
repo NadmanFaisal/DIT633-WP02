@@ -15,6 +15,7 @@ typedef struct q{
 // ##### Function declarations #####
 
 REGTYPE* random_list(void);
+REGTYPE* add_first(REGTYPE* temp, int data);
 
 
 //###### Main program #######
@@ -26,6 +27,8 @@ int main(int argc, char *argv[]) {
     srand(time(0)); // Random seed
     head=random_list();
     act_post=head;
+
+    act_post = add_first(head, 7);
     
     while( act_post!=NULL){
         printf("\n Post nr %d : %d" , nr++, act_post->number);
@@ -40,6 +43,8 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+// ==== End of main ======================================
 
 REGTYPE* random_list(void) {
 
@@ -73,4 +78,15 @@ REGTYPE* random_list(void) {
     }
     
     return (top);
-};
+}
+
+//========================================================== 
+
+REGTYPE *add_first(REGTYPE *temp, int data) {
+    REGTYPE *newNode = malloc(sizeof(REGTYPE));
+    newNode->number = data;
+    newNode->next = temp;
+    temp->prev = newNode;
+
+    return newNode;
+}
