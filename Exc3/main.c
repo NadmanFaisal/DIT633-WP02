@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef struct {
     char firstname[20];
@@ -19,25 +20,29 @@ void clearBuffer();
 
 int main(int argc, char *argv[]) {
     int user_input;
-    printMenu();
-    printf("\n");
+    int looper = true;
 
     PERSON ppost = {"nadman", "faisal", "20040920461c"};
     PERSON ppost2 = {"zahid", "hasan", "20001231123c"};
     PERSON ppost3 = {"Mohd", "Taha", "20040404123c"};
 
-    printf("What would you like to do?: ");
-    scanf("%d", &user_input);
-    clearBuffer();
+    while(looper) {
+        printMenu();
+        printf("\n");
+        printf("What would you like to do?: ");
+        scanf("%d", &user_input);
+        clearBuffer();
 
-    if(user_input == 1) {
-        printf("Create a new file!\n");
-        write_new_file(&ppost);
-    } else if(user_input == 2) {
-        printf("Write to a file!\n");
-        append_file(&ppost2);
-    } else {
-        printf("Invalid input. Please try again: \n");
+        if (user_input > 5 || user_input < 1) {
+            printf("Number out of bounds. Program exited\n");
+            looper = false;
+        } else if(user_input == 1) {
+            printf("Create a new file!\n");
+            write_new_file(&ppost);
+        } else if(user_input == 2) {
+            printf("Write to a file!\n");
+            append_file(&ppost2);
+        }
     }
 
     return (0);
