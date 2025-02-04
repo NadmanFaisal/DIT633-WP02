@@ -29,6 +29,19 @@ while( act_post!=NULL){
 printf("\n Post nr %d : %d" , nr++, act_post->number);
 act_post=act_post->next;
 }
+printf(" \n");
+
+int newNum = 7; //new number stores the number for add first method
+nr = 0; //nr count to 0, fo new value print
+head = add_first(head, newNum); // assigning add_first() method to head regtype.
+act_post=head;
+printf("After adding new value at first: \n"); // print line to differentiate the new values printed
+while( act_post!=NULL){
+printf("\n Post nr %d : %d" , nr++, act_post->number);
+act_post=act_post->next;
+}
+printf("\n");
+
 // --- Free the allocated memory ---
 while((act_post=head)!=NULL){
 head=act_post->next;
@@ -82,4 +95,14 @@ return(top);
 
 //==========================================================
 REGTYPE* add_first(REGTYPE* temp, int data){
+
+    REGTYPE *newNode = malloc(sizeof(REGTYPE)); // creating a new dynamic memory allocation
+    
+    newNode->number = data; // the newNode points to number, it gets assigned the data value
+    newNode->next = temp; // newNode points to next, it holds the previous first entry
+    newNode->prev = NULL; // newNode points to previous, which is a NULL value
+    temp->prev = newNode; // the the old first value points to previous, which holds the new new first entry.
+    temp = newNode; // the temp gets assigned the new first value.
+    
+    return (temp); // returns poiinter to the new first entry
 }
