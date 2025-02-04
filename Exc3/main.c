@@ -76,7 +76,7 @@ void write_new_file(PERSON *inrecord) {
 
 void append_file(PERSON *inrecord) {
     PERSON *temp = inrecord;
-    FILE* file = fopen("peoplesDb.bin", "wb");
+    FILE* file = fopen("peoplesDb.bin", "ab");
     if (file == NULL) {
         perror("Error opening file");
         return;

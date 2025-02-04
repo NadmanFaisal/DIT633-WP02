@@ -76,10 +76,11 @@ in the linked list. And the 'next' pointer points to the element after it.
 REGTYPE* random_list(void) {
 
     int nr, i=0;
+    int *pI = &i;                                   // Pointer to the index i, which is incremented in the for loop
     int *pNr = &nr;                                 // Pointer to the nr, to reassign values to it
     REGTYPE *top, *old, *item;                      // Pointers to the REGTYPE elements
 
-    for(i = 0; i < MAX; i++) {                      // Loops untill MAX, indicating the length of the list
+    for(*pI = 0; i < MAX; ++*pI) {                  // Loops untill MAX, indicating the length of the list
         if(i == 0) {                                // If the first element,
             top = malloc(sizeof(REGTYPE));          // Memory allocated for the 'top' element
             *pNr = rand() % 101;                    // Value of nr is reassigned
