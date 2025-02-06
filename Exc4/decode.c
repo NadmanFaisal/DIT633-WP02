@@ -19,15 +19,36 @@ int main(int argc, char *argv[]) {
     }
 
     char *firstChar = argv[1];
-
     int decimalNumber = (int)strtol(firstChar, NULL, 16);
+    int decimalCopy = decimalNumber;
+
+    int engineDecimal = 0;
+    int gearDecimal = 0;
+    int keyDecimal = 0;
+    int brake1Decimal = 0;
+    int brake2decimal = 0;
 
     printf("%d\n", decimalNumber);
 
-    decimalNumber = decimalNumber >> 4;
+    // Extract engine_on
+    engineDecimal = decimalCopy >> 7;
 
-    printf("%d\n", decimalNumber);
+    printf("Engine: %d\n", engineDecimal);
 
+    // Extract gears_pos
+    decimalCopy = decimalNumber;
+    decimalCopy = decimalCopy >> 4;
+    int decimalCopy2 = decimalCopy;
+    
+    for(int i = 3; i > 0; i--) {
+        decimalCopy2 = decimalCopy2 >> (i - 1);
+        int extractedBit = decimalCopy2 & 1;
+        gearDecimal = gearDecimal | extractedBit;
+        if(i != 1) {
+            gearDecimal = gearDecimal << 1;
+            decimalCopy2 = decimalCopy;
+        }
+    }
 
-    printf("\n");
+    printf("%d\n", gearDecimal);
 }
