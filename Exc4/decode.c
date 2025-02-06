@@ -11,12 +11,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     
-    for(int i = 0; i < 2; i ++) {
-        if(!isalpha(argv[1][i])) {
-            printf("Invalid arguement type.\n");
-            return 0;
-        }
-    }
 
     char *firstChar = argv[1];
     int decimalNumber = (int)strtol(firstChar, NULL, 16);
@@ -26,7 +20,7 @@ int main(int argc, char *argv[]) {
     int gearDecimal = 0;
     int keyDecimal = 0;
     int brake1Decimal = 0;
-    int brake2decimal = 0;
+    int brake2Decimal = 0;
 
     printf("%d\n", decimalNumber);
 
@@ -50,5 +44,68 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    printf("Gear: %d\n", gearDecimal);
+
+    // Extract key_pos
+    decimalCopy = decimalNumber;
+    decimalCopy = decimalCopy >> 2;
+    decimalCopy2 = decimalCopy;
+    
+    for(int i = 2; i > 0; i--) {
+        decimalCopy2 = decimalCopy2 >> (i - 1);
+        int extractedBit = decimalCopy2 & 1;
+        keyDecimal = keyDecimal | extractedBit;
+        if(i != 1) {
+            keyDecimal = keyDecimal << 1;
+            decimalCopy2 = decimalCopy;
+        }
+    }
+
+    printf("Key: %d\n", keyDecimal);
+
+    // Extract brake1
+    decimalCopy = decimalNumber;
+    decimalCopy = decimalCopy >> 1;
+    decimalCopy2 = decimalCopy;
+    
+    for(int i = 1; i > 0; i--) {
+        decimalCopy2 = decimalCopy2 >> (i - 1);
+        int extractedBit = decimalCopy2 & 1;
+        brake1Decimal = brake1Decimal | extractedBit;
+        if(i != 1) {
+            brake1Decimal = brake1Decimal << 1;
+            decimalCopy2 = decimalCopy;
+        }
+    }
+
+    printf("Brake 1: %d\n", brake1Decimal);
+
+    // Extract brake2
+    decimalCopy = decimalNumber;
+    decimalCopy = decimalCopy >> 1;
+    decimalCopy2 = decimalCopy;
+    
+    for(int i = 1; i > 0; i--) {
+        decimalCopy2 = decimalCopy2 >> (i - 1);
+        int extractedBit = decimalCopy2 & 1;
+        brake2Decimal = brake2Decimal | extractedBit;
+        if(i != 1) {
+            brake2Decimal = brake2Decimal << 1;
+            decimalCopy2 = decimalCopy;
+        }
+    }
+
+    printf("Name                   Value\n");
+    printf("---------------------------------------------------\n");
+    printf("engine_on              ");
+    printf("%d\n", engineDecimal);
+    printf("gear_pos               ");
     printf("%d\n", gearDecimal);
+    printf("key_pos                ");
+    printf("%d\n", keyDecimal);
+    printf("brake1                 ");
+    printf("%d\n", brake1Decimal);
+    printf("brake2                 ");
+    printf("%d\n", brake2Decimal);
+
 }
