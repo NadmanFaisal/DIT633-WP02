@@ -6,6 +6,7 @@
 #include <stdio.h> // library for I/O files
 #include <string.h> // library for string functions
 #include <stdlib.h> // library for exit function to exit program when encountering an end character
+#include <ctype.h>
 
 #define MAX_INPUT 100 // max is 100 char
 
@@ -92,21 +93,65 @@ int main(int argc, char* argv[]){
     ROBOT user_robot; // we create the robot for the user
     user_robot.dir = N; // we assign his direction to always face north at the start of the program
     char* robots_movement = malloc(MAX_INPUT*sizeof(char)); // we create list of characters to store list of characters for robot's movement
+    char robot_pos[MAX_INPUT]; // robot position in char to check for 'e'
+    int validNum; // valid num to check if num valid (1) or not valid (0)
 
     while(argc) { // while true, we keep looping so that the program continues to run until we encounter the end character 'e'
+        printf("Welcome to the robot moving game!\nTo move the robot you move by typing m or turn by typing t\nIf you ever want to end the game you type e\nYou wil now be prompted to type the robot's starting position.\n\n"); // print intro message
         do { // do the below while the user does not input the X above 99 or below 0 sinnce the X cannot be be above 99 or below 0
-            printf("Welcome to the robot moving game!\nTo move the robot you move by typing m or turn by typing t\nIf you ever want to end the game you type e\nYou wil now be prompted to type the robot's starting position.\n\n"); // print intro message
             printf("Please input robot's starting position in X-axis (0-99): "); //print message template to input X-axis
-            scanf("%d", &user_robot.xpos); // read X position from user input
-            clearstdin(); // clear input buffer
-        } while (user_robot.xpos > 99 || user_robot.xpos < 0);  // while the user does not input the X above 99 or below 0
+            fgets(robot_pos, MAX_INPUT, stdin); // get X-pos in char since we need to figure out if there is the 'e' character there
+            robot_pos[strlen(robot_pos) - 1] = '\0'; // add the end line character 
+            validNum = 1; // so long its valid until
+            for(int i = 0; i < strlen(robot_pos); i++){ // check each character
+                if(!isdigit(robot_pos[i])){ // if its not a digit
+                    if(robot_pos[i] == 'e'){ // check if its an 'e' if it is
+                        printf("Encountered an end of program character. Ending program...\n"); // print end message
+                        exit(0); // exit program
+                    }
+                    validNum = 0; // since it is not a digit, user must retype so it is not a valid num
+                }
+            }
+
+            if(!validNum){ // if it is not a valid num
+                printf("Error character inputted: Please input a valid number between 0-99.\n"); // print error message
+                continue; //do another loop in this loop
+            }
+
+            user_robot.xpos = atoi(robot_pos); //update x-pos
+            if(user_robot.xpos < 0 || user_robot.xpos > 99){ // if its not in range of 0-99
+                printf("Invalid range of numbers. Please input the number between 0-99.\n"); // print not in range error message
+                validNum = 0; // not valid num
+            }
+        } while (!validNum);  // while the user is not inputting a valid num
 
 
         do { // do the below while the user does not input the Y above 99 or below 0 sinnce the Y cannot be be above 99 or below 0
-            printf("Please input robot's starting position in Y-axis (0-99): "); // print message template to input Y-axis 
-            scanf("%d", &user_robot.ypos); // read Y position from user input
-            clearstdin(); // clear input buffer
-        } while (user_robot.ypos > 99 || user_robot.ypos < 0); // while the user does not input the Y above 99 or below 0
+            printf("Please input robot's starting position in Y-axis (0-99): "); //print message template to input Y-axis
+            fgets(robot_pos, MAX_INPUT, stdin); // get Y-pos in char since we need to figure out if there is the 'e' character there
+            robot_pos[strlen(robot_pos) - 1] = '\0'; // add the end line character 
+            validNum = 1; // so long its valid until
+            for(int i = 0; i < strlen(robot_pos); i++){ // check each character
+                if(!isdigit(robot_pos[i])){ // if its not a digit
+                    if(robot_pos[i] == 'e'){ // check if its an 'e' if it is
+                        printf("Encountered an end of program character. Ending program...\n"); // print end message
+                        exit(0); // exit program
+                    }
+                    validNum = 0; // since it is not a digit, user must retype so it is not a valid num
+                }
+            }
+
+            if(!validNum){ // if it is not a valid num
+                printf("Error character inputted: Please input a valid number between 0-99.\n"); // print error message
+                continue; //do another loop in this loop
+            }
+
+            user_robot.ypos = atoi(robot_pos); //update y-pos
+            if(user_robot.ypos < 0 || user_robot.ypos > 99){ // if its not in range of 0-99
+                printf("Invalid range of numbers. Please input the number between 0-99.\n"); // print not in range error message
+                validNum = 0; // not valid num
+            }
+        } while (!validNum);  // while the user is not inputting a valid num
 
         printf("Please input robot's movement: "); // print message template to input list of robot movement character
         fgets(robots_movement, MAX_INPUT, stdin); // read robot movement where MAX_INPUT here is the max number for 100 char
