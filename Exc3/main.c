@@ -13,7 +13,9 @@
 
 Improvements:-
 
-More error checking
+Personal number must be digits of 12 not any character.
+Check if the name has any digits, let the user retry.
+
 
 Questions:-
 
@@ -66,8 +68,8 @@ void write_new_file(PERSON *p_to_person){
     FILE *fileptr;
 
     if((fileptr = fopen(PATH, BINARY_WRITE)) == NULL){
-        printf("%s", "Error: Can not create the file. Please try again.\n");
-        exit(1);
+        printf("%s", "Error: Can not create the file. Please try again.\n\n");
+        return;
     }
     
     fclose(fileptr);
@@ -83,17 +85,18 @@ void append_file(PERSON *p_to_new_person){
 
     if((fileptr = fopen(PATH, BINARY_READ)) != NULL){
         if((fileptr = fopen(PATH, BINARY_APPEND)) == NULL){
-        printf("%s", "Error: Can not find the file. Make sure to create the file first\n");
-        exit(1);
+        printf("%s", "Error: Can not find the file. Make sure to create the file first\n\n");
+        return;
         }
     } else {
-        printf("%s", "Error: Can not find the file. Make sure to create the file first\n");
-        exit(1);
+        printf("%s", "Error: Can not find the file. Make sure to create the file first\n\n");
+        return;
     }
 
     // max no of strings to write
     printf("%s", "Type new user's first name: ");
     fgets(newfname, MAX_INPUT_FOR_NAME, stdin);
+    clearstdin();
     if(strlen(newfname) < 20){
         newfname[strlen(newfname) - 1] = '\0';
     }
@@ -101,6 +104,7 @@ void append_file(PERSON *p_to_new_person){
 
     printf("%s", "Type new user's last name: ");
     fgets(newlname, MAX_INPUT_FOR_NAME, stdin);
+    clearstdin();
     if(strlen(newlname) < 20){
         newlname[strlen(newlname) - 1] = '\0';
     }
@@ -108,13 +112,14 @@ void append_file(PERSON *p_to_new_person){
 
     do {
         printf("%s", "Type new user's personal number (yyyymmddnnnc): ");
-        fgets(newpersnum, MAX_INPUT_FOR_PERS, stdin);
+        fgets(newpersnum, MAX_INPUT_FOR_PERS, stdin);     
+        clearstdin();  
         if(newpersnum[strlen(newpersnum) - 1] == '\n'){
             newpersnum[strlen(newpersnum) - 1] = '\0';
         }
         printf("\n");
         if(strlen(newpersnum) < 12){
-            printf("Wrong format for personal number, please type in this format -> yyyymmddnnnc\n");
+            printf("Wrong format for personal number, please type in this format -> yyyymmddnnnc\n\n");
         }
     } while (strlen(newpersnum) != 12);
 
@@ -124,7 +129,7 @@ void append_file(PERSON *p_to_new_person){
         printf("Added new user successfully!\n\n");
     } else {
         printf("Error occurred when adding user to database, please try again.\n\n");
-        exit(1);
+        return;
     }
 
     fclose(fileptr);
@@ -137,14 +142,14 @@ void printfile(){
     int n = 0;
 
     if((fileptr = fopen(PATH, BINARY_READ)) == NULL){
-        printf("%s", "Error: Can not find the file. Make sure to create the file first\n");
-        exit(1);
+        printf("%s", "Error: Can not find the file. Make sure to create the file first\n\n");
+        return;
     }
 
     int c = fgetc(fileptr);
     if(c == EOF){
-        printf("The file has no students in it, please add new person to the file\n");
-        exit(1);
+        printf("The file has no students in it, please add new person to the file\n\n");
+        return;
     } else {
         ungetc(c, fileptr);
     }
@@ -173,14 +178,14 @@ void search_by_firstname(char *name_of_person){
     int foundUser = 0;
 
     if((fileptr = fopen(PATH, BINARY_READ)) == NULL){
-        printf("%s", "Error: Can not find the file. Make sure to create the file first\n");
-        exit(1);
+        printf("%s", "Error: Can not find the file. Make sure to create the file first\n\n");
+        return;
     }
 
     int c = fgetc(fileptr);
     if(c == EOF){
-        printf("The file has no students in it, please add new person to the file\n");
-        exit(1);
+        printf("The file has no students in it, please add new person to the file\n\n");
+        return;
     } else {
         ungetc(c, fileptr);
     }
@@ -216,6 +221,7 @@ int main(void){
     PERSON ppost; // person struct to perform actions with during the main program
     PERSON pnewpost; // new person struct to add in the menu
     int user_input; // user's input for the menu
+    char user_input_char[2];
     char name[MAX_INPUT_FOR_NAME];
 
     do {
@@ -227,10 +233,17 @@ int main(void){
         printf("%s", "4. Print out all in the file.\n"); // print menu text template no.4 print out all persons in the file
         printf("%s", "5. Exit the program.\n\n"); // print menu text template no.5 Exit the program
 
-        printf("%s", "Please type your choice from the menu: ");
-        scanf("%d", &user_input); // read user input
-        clearstdin();
-        printf("\n");
+        do {
+            printf("%s", "Please type your choice from the menu, it will only read the first character: ");
+            fgets(user_input_char, 2, stdin); // read user input
+            if(user_input_char[0] < '0' || user_input_char[0] > '9'){
+                printf("\nUser did not input a  digit, please input a digit.");
+            }
+            clearstdin();
+            printf("\n");
+        } while (user_input_char[0] < '0' || user_input_char[0] > '9');
+
+        user_input = atoi(user_input_char);
 
         switch (user_input) {
             case 1:
@@ -254,7 +267,7 @@ int main(void){
             case 5:
                 break;
             default:
-                printf("Inputted out of range of 1-5, please input between 1-5\n");
+                printf("Inputted out of range of 1-5, please input between 1-5.\n\n");
         }
 
     } while (user_input != 5); // as long as user doesn't choose 5, which is exiting the program
