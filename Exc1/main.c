@@ -71,15 +71,19 @@ void move(char* chars_of_robots_movement, ROBOT *p_to_user_robot){ // takes in p
             switch (p_to_user_robot -> dir){ //we check the direction
                 case N: // if the robot direction is facing North
                     p_to_user_robot -> ypos++; // increase y-axis position
+                    p_to_user_robot -> ypos % 100; // wrap around in case we go to 101
                     break; // and thats it we do not want it to check all cases
                 case O: // if the robot direction is facing East
                     p_to_user_robot -> xpos++; // increase x-axis position
+                    p_to_user_robot -> xpos % 100; // wrap around in case we go to 101
                     break; // and thats it we do not want it to check all cases
                 case S: // if the robot direction is facing South
                     p_to_user_robot -> ypos--; // decrease y-axis position
+                    p_to_user_robot -> ypos % 100; // wrap around in case we go to -1
                     break; // and thats it we do not want it to check all cases
                 case W: // if the robot direction is facing West
                     p_to_user_robot -> xpos--; // decrease x-axis position
+                    p_to_user_robot -> xpos % 100; // wrap around in case we go to -1
                     break; // and thats it we do not want it to check all cases
             }
         }
