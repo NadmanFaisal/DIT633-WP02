@@ -6,16 +6,13 @@
 #include <stdio.h> // library for I/O files
 #include <string.h> // library for string functions
 #include <stdlib.h> // library for exit function to exit program when encountering an end character
-#include <ctype.h>
+#include <ctype.h> // library to include isdigit function, that checks if a number is a digit
 
 #define MAX_INPUT 100 // max is 100 char
 
 /*
 
 Improvements:-
-
-Do end of character checking on the x and y pos scanf's
-Either wrap ( % 100) or robot does not move until he turns (a bit harder)
 
 Questions:-
 
@@ -168,6 +165,6 @@ int main(int argc, char* argv[]){
 
     }
 
-    free(robots_movement);
+    free(robots_movement); // free memory for robot_movement string
 
 }
