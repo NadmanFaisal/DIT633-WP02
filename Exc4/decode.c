@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Name                   Value\n");
-    printf("---------------------------------------------------\n");
+    printf("===================================================\n");
     printf("engine_on              ");
     printf("%d\n", engineDecimal);
     printf("gear_pos               ");
