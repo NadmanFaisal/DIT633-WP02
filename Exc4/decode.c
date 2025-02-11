@@ -1,91 +1,47 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <stdio.h> // stdio library for printf
+#include <stdlib.h> // stdlib for use of strtol
+#include <string.h> // string library for strlen
 
-typedef unsigned char byte;
+typedef unsigned char byte; // define byte type
 
-/*
-This method takes the pointer to the destination, the value to be shifted, 
-the shifting value, and the numberOfBits to extract. The method starts off 
-by declaring a decimalCopy which is equal to the valueToShift. It is then 
-used to shift its value by the shifting value to bring the relevant bits 
-to the absolute end. 
-
-Then, the last bits are extracted, and masked to the destination, while 
-shifting the destination to the left to keep accomodating for more of the
-required btis
-*/
-void unpackBits(byte *destination, byte *valueToShift, int shiftingValue, int numberOfBits) {
-    *valueToShift = *valueToShift >> shiftingValue;         // Value shifted to the right by the shifting value specified
-    byte decimalCopy = *valueToShift;                       // copy of the valueToShift made to back track at the end    
-
-    for(int i = numberOfBits; i > 0; i--) {                 // Looped through as many times as specified to extract bits
-        decimalCopy = decimalCopy >> (i - 1);               // The first relevant bit shifted to the absolute end
-        byte extractedBit = decimalCopy & 1;                 // The bit is then extracted
-        *destination = *destination | extractedBit;         // The destination is then masked by the extracted bit
-        if(i != 1) {                                        // destination bits keep shifting untill the last bit is extracted
-            *destination = *destination << 1;               // destination bits keep shifting to accomodate for new bits
-            decimalCopy = *valueToShift;                    // decimalCopy reinitialized to valueToShift.
-        }
-    }
-
-    printf("NUMBER: %d\n", *destination);                   // The number printed to ensure expected results
-}
-
-int main(int argc, char *argv[]) {
-
-    // If arguements less than 2 or more than 2 are provided, it indicates invalid arguements
-    if(argc < 2 || argc > 2) {
-        printf("Invalid arguements.\n");        // Respective prompt is printed.
-        return 0;                               // Program exits.
-    }
+// main program
+int main(int argc, char* argv[]){ 
     
+    // if arguments are less than 2
+    if(argc != 2){
+        // throw an error not providing hexadecimal
+        printf("%s", "Error occurred: Did not provide an argument. Please provide a hexadecimal as an argument. (ex: AB)");
+    }
 
-    byte *firstChar = argv[1];                                      // The second arguement is stored in a pointer to a char, indicating a string.
-    byte decimalNumber = (int)strtol(firstChar, NULL, 16);           // The hexadecimal string is converted to integer.
-    byte decimalCopy = decimalNumber;                               // Copy of the decimalNumber variable declared, for bitshifting operations.
+    char* p_to_arg = argv[1]; // pointer to hexadecimal number
 
-    byte engineDecimal = 0;              // The variable which will store the int value for engine_on
-    byte gearDecimal = 0;                // The variable which will store the int value for gear_pos
-    byte keyDecimal = 0;                 // The variable which will store the int value for key_pos
-    byte brake1Decimal = 0;              // The variable which will store the int value for brake1
-    byte brake2Decimal = 0;              // The variable which will store the int value for brake2
+    // for each char in the hexadecimal number (without adding 0x)
+    for (int i = 0; i < strlen(argv[1]); i++) {
+        char character_in_arg = *p_to_arg; // extract character from the value of pointer
+        if((character_in_arg < '0' || character_in_arg > '9') && (character_in_arg < 'A' || character_in_arg > 'F')) { // if character isnt a digit and isnt between A to F
+            printf("%s","Error occurred: Did not provide a valid hexadecimal format. Please provide a hexadecimal number like stated (ex: AB)"); // print error message
+            return(0); // exit program
+        }
+        p_to_arg++; // increase the pointer to next character
+    } 
 
-    printf("%d\n", decimalNumber);       // The decimal number is printed to ensure expected conversion
+    char *hexadecimalStr = argv[1]; // assign to a string
+    long val = strtol(hexadecimalStr, NULL, 16); // convert the string to base 16 number
+    byte numInByte = (byte) val; // put that value as a byte
+ 
+    byte engine_on = (numInByte >> 7) & 0x01; // shift to the first bit to the left and compare with 00000001
+    byte gear_pos = (numInByte >> 4) & 0x07; // shift the second, third and fourth bith and compare with 00000111
+    byte key_pos = (numInByte >> 2) & 0x03; // shift to the fifth and sixth bit and comparen with 00000011
+    byte brake1 = (numInByte >> 1) & 0x01; //  shift to the seventh bit and compare wiht 000001
+    byte brake2 = numInByte & 0x01; // no need to shift for the 8th bit and comapre with 000001
 
-    // Extract engine_on
-    engineDecimal = decimalCopy >> 7;                   // The bits for engine is extracted. Since it is the left most bit, the bits are shifted
-                                                        // all the way to the right by 7
-
-    printf("Engine: %d\n", engineDecimal);              // The decimal number of engine_pos printed to ensure expected conversion
-
-    // Extract gears_pos
-    decimalCopy = decimalNumber;                        // The decimalCopy is reinitialized to decimalNumber for further bitshifting operations
-    unpackBits(&gearDecimal, &decimalCopy, 4, 3);
-
-    // Extract key_pos
-    decimalCopy = decimalNumber;                        // DecimalCopy reinitialized to decimalNumber
-    unpackBits(&keyDecimal, &decimalCopy, 2, 2);         // Method called to shift bits and mask keyDecimal to shifted bits
-
-    // Extract brake1
-    decimalCopy = decimalNumber;                        // DecimalCopy reinitialized to decimalNumber
-    unpackBits(&brake1Decimal, &decimalCopy, 1, 1);      // Method called to shift bits and mask brake1Decimal to shifted bits
-
-    // Extract brake2
-    decimalCopy = decimalNumber;                        // DecimalCopy reinitialized to decimalNumber
-    unpackBits(&brake2Decimal, &decimalCopy, 1, 1);      // Method called to shift bits and mask brake2Decimal to shifted bits
-
-    printf("Name                   Value\n");
-    printf("===================================================\n");
-    printf("engine_on              ");
-    printf("%d\n", engineDecimal);                      // The unpacked engine_on value printed
-    printf("gear_pos               ");
-    printf("%d\n", gearDecimal);                        // The unpacked gear_pos value printed
-    printf("key_pos                ");
-    printf("%d\n", keyDecimal);                         // The unpacked key_pos value printed
-    printf("brake1                 ");
-    printf("%d\n", brake1Decimal);                      // The unpacked brake1 value printed
-    printf("brake2                 ");
-    printf("%d\n", brake2Decimal);                      // The unpacked brake2 value printed
-
+    // print name template
+    printf("%s","Name \t\t Value\n"); // name and value template
+    printf("%s","------------------------------\n"); // dashes template
+    printf("engine_on\t  %d\n", engine_on); // print engine_on template
+    printf("gear_pos\t  %d\n", gear_pos); // print gear_pos template
+    printf("key_pos\t\t  %d\n", key_pos); // print key_pos template
+    printf("brake1\t\t  %d\n", brake1); // print brake1 template
+    printf("brake2\t\t  %d\n", brake2); // print brake2 template
+    
 }
