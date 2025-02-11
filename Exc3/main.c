@@ -114,6 +114,7 @@ void write_new_file(PERSON *inrecord){
 
     if (file == NULL){ //if we are unable to create the binary file a error is printed
         printf("Error, the file could not be opened");
+        return;
     } else {
         fwrite(inrecord, sizeof(PERSON), 1, file); //if the file is created, we insert the person value in the file.
     }
@@ -131,7 +132,7 @@ void append_file(PERSON *inrecord){
 
     if ((file = fopen("personRecord.bin","rb")) == NULL) {
         printf("Error! File not found.\n");
-        exit(0);
+        return;
     }
     
     file = fopen("personRecord.bin","ab"); //open the existing binanry file in appeand mode
@@ -157,7 +158,7 @@ void search_by_firstname(char *name){
 
     if ((file = fopen("personRecord.bin","rb")) == NULL) {
         printf("Error! File not found.\n");
-        exit(0);
+        return;
     }
 
     file = fopen("personRecord.bin","rb"); //oen the file in read mode
@@ -200,7 +201,7 @@ void printfile(void){
 
     if (file == NULL) {
         printf("Error! File not found.\n");
-        exit(0);
+        return;
     }
 
     /*The loop keeps reading the record till the end of file, &person is the address where data will be stored,
