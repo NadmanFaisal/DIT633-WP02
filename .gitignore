@@ -1,4 +1,5 @@
 .vscode/*
+*.dSYM/
 Exc*/main
 Exc*/code
 Exc*/decode

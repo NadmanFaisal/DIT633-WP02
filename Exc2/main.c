@@ -25,31 +25,37 @@ REGTYPE* add_first(REGTYPE* temp, int data);    // Adds a REGTYPE element to the
 
 
 //###### Main program #######
-int main(int argc, char *argv[]) {
-    
-    int nr=0;
-    REGTYPE *act_post , *head=NULL;
-    
-    srand(time(0)); // Random seed
-    head=random_list();
-    act_post=head;
-
-    act_post = add_first(head, 7);
-    
-    while( act_post!=NULL){
-        printf("\n Post nr %d : %d" , nr++, act_post->number);
-        act_post=act_post->next;
-    }
-
-    // --- Free the allocated memory ---
-    while((act_post=head)!=NULL){
-        head=act_post->next;
-        free(act_post);
-    }
-
-    return 0;
+int main(int argc, char *argv[])
+{
+int nr=0;
+REGTYPE *act_post , *head=NULL;
+srand(time(0)); // Random seed
+head=random_list();
+act_post=head;
+while( act_post!=NULL){
+printf("\n Post nr %d : %d" , nr++, act_post->number);
+act_post=act_post->next;
 }
+printf(" \n");
 
+int newNum = 7; //new number stores the number for add first method
+nr = 0; //nr count to 0, fo new value print
+head = add_first(head, newNum); // assigning add_first() method to head regtype.
+act_post=head;
+printf("After adding new value at first: \n"); // print line to differentiate the new values printed
+while( act_post!=NULL){
+printf("\n Post nr %d : %d" , nr++, act_post->number);
+act_post=act_post->next;
+}
+printf("\n");
+
+// --- Free the allocated memory ---
+while((act_post=head)!=NULL){
+head=act_post->next;
+free(act_post);
+}
+return 0;
+}
 // ==== End of main ======================================
 
 /*

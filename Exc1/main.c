@@ -1,199 +1,188 @@
-#include <stdio.h>
+#include <stdio.h> // header file
+#include <string.h>
 #include <stdbool.h>
-#define MAX_LENGTH 100
 
-/*
-Enumerated values of direction, where the constants
-are given names, representing directions.
-*/
-enum DIRECTION {
-    N = 1,      // North
-    O = 2,      // East
-    S = 3,      // South
-    W = 4       // West
-};
+#define MAX 100 // defing max value for string (max 20 command at once)
 
-/*
-Different variables od different data types packaged into one,
-representing a ROBOT. The type name of ROBOT is ROBOT, indicating
-that ROBOT is a data type.
-
-Here, ROBOT has different types of variables packaged together in a
-bundle. The relevant data for ROBOT are xpos (x-coordinate), 
-ypos (y-coordinatae), and an enum dir, indicating direction.
-*/
-typedef struct ROBOT {
-    int xpos;               // x-coordinate
-    int ypos;               // y-coordinate
-    enum DIRECTION dir;     // facing direction
-};
-
-/*
-This method is used to turn the ROBOT by 90 degrees to it's right.
-This method works by taking the pointer to the ROBOT, and changind
-its direction by changing the values of the member variablse.
-For this case, the only member variable that is changed is the
-'dir' variable of the robot. If the robot is facing North, its
-'dir' changes to 'East'. If it is facing 'East', the direction 
-changes to 'South'.
-
-This is done by taking the pointer to the robot, and then accessing
-the pointer to the direction with the help of arrow operators,
-and changing the value. This works by accessing the memory address
-of the dir through the arrow operator, and changing the value of the
-dir in that particular memory address.
-*/
-
-void turn (struct ROBOT *robot) {
-
-    if(robot->dir == N) {           // If the pointer to the dir of robot is North,
-        robot->dir = O;             // Changes the value of dir to East
-    } else if(robot->dir == O) {    // If the pointer to the dir of robot is East,
-        robot->dir = S;             // Changes the value of dir to South
-    } else if(robot->dir == S) {    // If the pointer to the dir of robot is South,
-        robot->dir = W;             // Changes the value of dir to West
-    } else {
-        robot->dir = N;             // Else, changes the value of dir to North again.
-    }
-
-}
-
-/*
-This method works my taking the pointer to the robot as parameter, and
-Accessing the member variables such as 'dir', 'xpos', and 'ypos'. Depending
-on the direction of the robot, the pointers to the 'xpos' and 'ypos' are
-incremented or decremented.
-
-This is done by the help of arrow opereator (->), where the pointers 
-to the xpos and ypos points towards their respective memory addresses,
-and reasigns new values.
-*/
-
-void move(struct ROBOT *robot) {
-
-    if(robot->dir == N) {           // If the robot is facing north,
-        ++robot->xpos;              // the xpos is incremented (robot moves forward)
-    } else if(robot->dir == S) {    // If the robot is facing south,
-        --robot->xpos;              // xpos is decremented (robot moves backwards)
-    } else if(robot->dir == O) {    // If the robot is facing east,
-        ++robot->ypos;              // ypos is incremented (robot moves towards right direction)
-    } else {                        
-        --robot->ypos;              // Else, the robot moves left
-    }
-}
-
-/*
-Calculates the length of the entered string by taking the pointer to the array as a parameter
-and keeps incrementing the counter until the null-terminator is found in the array.
-*/
-
-int calculateLen(char *string) {
-    int counter = 0;                    // Variable to keep track of the length of the string
-
-    while(string[counter] != '\0') {    // Loop keeps incrementing counter until null-terminator
-        counter++;                      // Counter incremented
-    }
-
-    return counter;                     // Returns the counter
-}
-
-/*
-The buffer is cleared each time an input is taken from the user.
-This method functions by retrieving the charactes and discarding them
-until it reaches a new-line character OR it reaches the end of file.
-*/
-
-void clearBuffer(void) {
+// this method clears buffer after user input
+void clearBuffer (void) {
     char input;
-    while((input = getchar()) != '\n' && input != EOF);
+    while ( (input = getchar()) != '\n' && input != EOF );
 }
 
-int main(int argc, char *argv[]) {
-    
-    int user_x;                     // Variable to store x-coordinate from user
-    int user_y;                     // Variable to store y-coordinate from user
-    bool program_loop = true;          // Boolean to keep taking user input
-    char movement[MAX_LENGTH];      // Array of characters as string taken from user input
-    char end_char = 'x';            // Character that denotes the end of program
+// enum for Direction
+enum DIRECTION{N, O, S, W}; // North, East, South, West
 
-    printf("Type in the starting x-pos: ");
-    scanf("%d", &user_x);           // Stores the user input as integer for robot's x-coordinate
-    clearBuffer();                  // Clears buffer to prevent '\n' from skipping user input
+// record of type ROBOT, used to create the robot
+typedef struct {
+int xpos; // X cordinator
+int ypos; // y cordinator
+enum DIRECTION dir; // direction
+} ROBOT;
 
-    printf("Type in the starting y-pos: ");
-    scanf("%d", &user_y);           // Stores the user input as integer for robot's y-coordinate
-    clearBuffer();                  // Clears buffer to prevent '\n' from skipping user input
-    
-    enum DIRECTION direction = N;                           // Starting direction of robot set as NORTH
-    struct ROBOT my_robot = {user_x, user_y, direction};    // Creating my_robot from ROBOT structure
-    struct ROBOT *pMy_robot = &my_robot;                    // Pointer which stores the memory address of my_robot variable
+/*This method is used to move the robot any directionit takes
+three pointer argument as parameter. The movement is based on
+the X, Y axis. It checks the currectDirection and moves towards
+that direction, and depending on the ROBOT locationX and Y cordinator
+gets incrimented and subtracted
+*/
+void move(char * currentDirection, int * xpos, int * ypos){ //move method taking pointer parameter argument
 
-    /*
-    The loop is responsible for taking user inputs repeatedly.
-    The while loop breaks once it has detected 'end_char', or 
-    an invalid character. 
-    */
+    if(*currentDirection == N){ // checking if the direction is North
+        ++*ypos; // incriment y coordinate by 1
+    } else if (*currentDirection == S) { // checking if the direction is North
+        --*ypos; // subtract y coordnate by 1
+    } else if (*currentDirection == O) { // checking if the direction is North
+        ++*xpos; // incriment x coordinate by 1
+    } else if (*currentDirection == W) { // checking if the direction is North
+        --*xpos; // subtract x coordnate by 1
+    }
 
-    while(program_loop) {
-        // The program prompts the user for movement strings
-        printf("Put in a string of movements: ");
-        scanf("%s", movement);      // String of characters stored in 'movement' variable
-        clearBuffer();              // Buffer is cleared so that no '\n' is stored which might result in missed user input
-        printf("\n");               // Enough spacing printed for readability of the console
+}
 
-        /*
-        The length of the string is calculated and stored in 'string_len' variable which is used in the
-        for-loop so that the loop does not reach an index of the array where there are no characters.
+/*The turn() is used to change the direction (N,O,S,W) of the ROBOT
+It changes direction clock wise at 90 degree. The method has only
+on poinyer parameter as argument. The if condition checks the 
+currentDirection and moves the direction 90 degree cloclwise 
+axxording to the user command*/
+void turn(char * currentDirection){ //taking pointer parameter as argument
 
-        The calculation is done by passing the memory adddress of the array.
-        */
+    if(*currentDirection == N){ // check if the direction is Noth
+        *currentDirection = O; // move 90 degree clockwise we get East
+        
+    } else if (*currentDirection == O) { // check if the direction is East
+        *currentDirection = S; // move 90 degree clockwise we get South
+        
+    } else if (*currentDirection == S) { // check if the direction is South
+        *currentDirection = W; // move 90 degree clockwise we get West
+        
+    } else if (*currentDirection == W) { // check if the direction is West
+        *currentDirection = N; // move 90 degree clockwise we get North
+        
+    }
+}
 
-        int string_len = calculateLen(&movement);
+/*The method is used to output the direction of the ROBOT.
+it takes direction as pararmemter and we are using a switch
+case to identfy the direction and print the current direction*/
+void printDirection(char direction){ //takes direction as parameter
+    switch (direction) { //direction to check agaist the case
+        case N:
+            printf("Current direction: N\n"); //if the direction is North(N) this is printed
+            break; // breaks when match found
+        case O:
+            printf("Current direction: O\n"); //if the direction is East(O) this is printed
+            break; // breaks when match found
+        case S:
+            printf("Current direction: S\n"); //if the direction is South(S) this is printed
+            break; // breaks when match found
+        case W:
+            printf("Current direction: W\n"); //if the direction is West(W) this is printed
+            break; // breaks when match found
+    }
 
-        // The loop continues untill the length of the string 'movement'
-        for(int i = 0; i < string_len; i++) {
-            if(movement[i] == 'm') {        // If the character 'm' has been discovered,
-                move(pMy_robot);            // the robot will be moved with the method 'move'
-                // If the position of the robot is beyond 0-99, the loop will be exited.
-                if(pMy_robot->xpos > 99 || pMy_robot->xpos < 0 || pMy_robot->ypos > 99 || pMy_robot->ypos < 0) {
-                    printf("Robot out of bounds. Program exited.\n");
-                    break;      // Exits the for-loop
-                }
-            } else if(movement[i] == 't') {             // If the character 't' has been discovered,
-                turn(pMy_robot);                        // the robot will be turned with the method 'turn'
-            } else if(movement[i] == end_char) {        // If the end_char is discovered, the program will be exited
-                printf("Program terminated!\n");
-                program_loop = false;                   // The program condition is set to false.
-                return 0;                               // Program ends with zero-value
-            } else {                                    // Else if an invalid character is discovered, the program also ends.
-                printf("Invalid characted encountered. Program exited.\n");
-                program_loop = false;                   // The program condition is set to false.
-                return 0;                               // Program ends with zero-value
-            }
+}
+
+/*The main function, it holds the body of the ROBOT. Moreover, exception coditions are also checked
+here. It holds the initial output for the user to enter the X and Y coordinates, and the commands
+for MOVE and TURN. We are using while loop to control the program exit logic and for handling invalid
+inputs. Adding to it, a for loop is used to itirate through the command string and commands are executed
+based on the string input(m,t).*/
+int main(int argc, char * argv[]){
+
+    ROBOT robot; // initializing robot
+    char currentDirection = robot.dir; // assinging the robot direction
+    currentDirection = N; // default direction of Robot
+    int  xCordinate = robot.xpos; // variable to hold the x coordinate
+    int  yCordinate = robot.ypos; // variable to hold the y coordinate
+    bool progRuning = true; // boolean for program exit logic
+
+// the while loop is used to end the program, it runs till the user enters x
+// once the user enters x, progRuning = false, hence the program ends
+while (progRuning) { 
+
+    int  MAX_CORDINATE = 99; // varibale to store the maximum bound for x and y coordinate
+    int  MIN_CORDINATE = 0; // variable to store the minimum bound for x and y coordinate
+
+    printf("Enter robot starting X cordinate (0-99): \n"); // prompts user to enter the X coordinate
+    scanf("%d", &xCordinate); // storing the user input in for x coordinate 
+    clearBuffer(); // clears buffer
+
+        // the loop runs till user input is out of bound. Once the user input is
+        // within the max and mix x-coordinate, it stores the the userinput
+        while ((xCordinate < MIN_CORDINATE) || (xCordinate > MAX_CORDINATE)) {
+
+            printf("Invalid X cordinate. Enter robot starting X cordinate (0-99): \n");
+            scanf("%d", &xCordinate); // stores valid user input for x coordinate
+            clearBuffer(); // clear buffer
+
         }
 
-        printf("New robot x-pos: %d\n", pMy_robot->xpos);
-        printf("New robot y-pos: %d\n", pMy_robot->ypos);
-        printf("\n");
+    printf("Enter robot starting Y cordinate (0-99): \n"); // prompts user to enter the Y coordinate
+    scanf("%d", &yCordinate); // storing the user input in for y coordinate
+    clearBuffer(); // clears buffer
 
-        /*
-        The program prompts the user for new movement starting positions
-        */
+        // the loop runs till user input is out of bound. Once the user input is
+        // within the max and mix y-coordinate, it stores the the userinput
+        while ((yCordinate < MIN_CORDINATE) || (yCordinate > MAX_CORDINATE) ) {
 
-        printf("Type in the starting x-pos: ");
-        scanf("%d", &user_x);           // Stores the user input as integer for robot's x-coordinate
-        clearBuffer();                  // Clears buffer to prevent '\n' from skipping user input
+            printf("Invalid Y cordinate. Enter robot starting Y cordinate (0-99): \n");
+            scanf("%d", &yCordinate); // stores valid user input for y coordinate
+            clearBuffer(); // clear buffer
+            
+        }
 
-        printf("Type in the starting y-pos: ");
-        scanf("%d", &user_y);           // Stores the user input as integer for robot's y-coordinate
-        clearBuffer();                  // Clears buffer to prevent '\n' from skipping user input
-        printf("\n");                   // Enough spacing printed for readability of the console
 
-        // Reinitializer the values for the robot as the new stored user inputs
-        pMy_robot->xpos = user_x;
-        pMy_robot->ypos = user_y;
-        pMy_robot->dir = N;         // Resets the direction of the robot to NORTH
+    char robotCommand[MAX] = {0}; // variable to hold the command string (string of characters 'm' and 't')
+
+
+    printf("Enter 'm' to move and 't' to turn ('x' to Exit): "); // prompts the user to enter a command
+    scanf("%s", robotCommand); // the command string is stored in the variable
+    clearBuffer(); // clear buffer
+
+    
+    /*The for loop is used to itirate through the string and find m,t,x as command
+    It ititrataes till the command string length and keeps incrimenting till reaching
+    the length. It itirates through the string and compares every char/index value with
+    the command characters(m,t,x). if a match is found appropriate method is called to 
+    perform that specific action*/
+    for (int i = 0; i < strlen(robotCommand); i++) {
+
+        // the loop executes till it finds valid command characters in the string, once it finds
+        // a valid charcter it stores in the variable.
+        while ((robotCommand[i] != 'm') && (robotCommand[i] != 't') && (robotCommand[i] != 'x' )) {
+            printf("Invalid command, Enter 'm' to move and 't' to turn and 'x' to Exit(lowercase): "); // prompt for user to help them with command character
+            scanf("%s", robotCommand); // stores valid command character
+            clearBuffer(); // clears buffer
+            i = 0; // reseting the length size to validate from the beginning again
+        }
+
+        if (robotCommand[i] == 'm') { // checks if the string charcter is equal to 'm'. If true the function is called
+
+            move(&currentDirection, &xCordinate, &yCordinate); // calls the move function and it has the robot values as parameter
+            
+        } else if (robotCommand[i]== 't') { // checks if the string charcter is equal to 't'. If true the function is called
+
+            turn(&currentDirection); // calls the turn function and it has the robot values as parameter
+            
+        } else if (robotCommand[i] == 'x' ){ // checks if the string charcter is equal to 'x'. If true, the boolean variable is updated to false
+
+            printf("Successful EXIT\n"); // printline for exit behaviour
+            progRuning = false; // updating the boolean to false, it stops the while loop
+            return 0; // retun of success
+        }
+       
+        
     }
+    printf("\n"); // print line for spacing
+    printf("######-ROBOT_LOCATION-######\n"); // header formating for output
+    printDirection(currentDirection); // prints the direction the robot is facing
+    printf("Cordinates: X: %d Y: %d\n", xCordinate, yCordinate); // print x and y coordinate of robot
+    printf("############################\n"); // formating for ouot put
+    printf("\n"); // print line for spcaing
+    
+    }
+    return 0; // return on successfull execution
 
-    return 0;
+
 }
