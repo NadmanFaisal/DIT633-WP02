@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,14 +7,22 @@
 
 // ##### typedefs ####
 typedef struct q{
-int number;
-struct q *next;
-struct q *prev;
+    int number;
+    struct q *next;
+    struct q *prev;
 } REGTYPE;
 
 // ##### Function declarations #####
-REGTYPE* random_list(void);
-REGTYPE* add_first(REGTYPE* temp, int data);
+
+/*
+Functions are declared at the top to allow the compiler to compile properly. 
+Without declaring the function before the main, calling these functions will 
+cause the compiler to face error since the functions are defined at the bottom. 
+*/
+
+REGTYPE* random_list(void);                     // Creates a linked list of 5 REGTYPE elements of random numbers
+REGTYPE* add_first(REGTYPE* temp, int data);    // Adds a REGTYPE element to the first position of a linked list
+
 
 //###### Main program #######
 int main(int argc, char *argv[])
@@ -51,58 +58,75 @@ return 0;
 }
 // ==== End of main ======================================
 
-REGTYPE* random_list(void ){
+/*
+random_list creates a linked list of REGTYPE with random data values. 
+Method does not take any parameters. 
 
-int nr; //variable declaration to store random number
-int *pnr = &nr;
-int i=0; //index value for 'for loop'
-REGTYPE *top, *old, *item; //to create REGTYPE body
+This method functions by allocating memories for each elements, and then
+setting their 'number' member variable to a random number with the help of 
+pointers. Then, arrow operators are used to access member variables of the 
+REGTYPE structs, and values are assigned/reassigned. 
 
-for (i; i < MAX; i++) {  //the for loop is executed till the MAX value, it contains a if, else-if, else condition
+If the it is the first element of the linked list, then 'next' pointer points 
+to null, as no other elements have been created for the linked list yet. It also 
+does not need the 'prev' pointer to point to anything, as there are no elements 
+before it. 
 
-    *pnr = rand()%101; //generates random number and stores it in the variable
+If it is the last element, then the element does not need 'next' pointer to 
+point to anything, as it is the last element. 
 
-    if (i == 0){ // if the index value equals to 0, this if condition is executed
-        item = malloc(sizeof(REGTYPE)); // creates a dynamic memory allocation for the item
-        item->number = *pnr; //the random number is stored in the item pointing to number
-        item->next = NULL; //item pointing to next, gets a null value
-        item->prev = top; //item pointing to prev, gets assigned the top/head
-        top = item; //top stores the item value
-        old = item; //old storees the item value
+If it is any element in between, then the 'prev' pointer points to the element before it 
+in the linked list. And the 'next' pointer points to the element after it.
+*/
 
-    } else if (i == MAX - 1){ //if the index value mathes the last last value, the condition is executed
-        item = malloc(sizeof(REGTYPE)); // create a dynamic memory allocation for the item
-        item->number = *pnr; //the random number is stored in the item pointing to number
-        item->next = NULL; //item pointing to next, gets a null value
-        item->prev = old; //item pointing to prev, gets assigned the old value
-        old->next = item; //old pointer pointing to next, gets assigned the current item
-        old = item; //the item becomes the old value;
+REGTYPE* random_list(void) {
 
-    } else { // else this condition executed on the rest of the indexes
-        item = malloc(sizeof(REGTYPE)); //create a dynamic memory allocation for the item
-        item->number = *pnr; //the random number is stored in the item pointing to number
-        item->next = NULL; //item pointing to next, gets a null value
-        item->prev = old; //item pointing to prev, gets assigned the old value
-        old->next = item; //old pointer pointing to next, gets assigned the current item
-        old = item; //the item becomes the old value;
+    int nr, i=0;
+    int *pI = &i;                                   // Pointer to the index i, which is incremented in the for loop
+    int *pNr = &nr;                                 // Pointer to the nr, to reassign values to it
+    REGTYPE *top, *old, *item;                      // Pointers to the REGTYPE elements
 
+    for(*pI = 0; i < MAX; ++*pI) {                  // Loops untill MAX, indicating the length of the list
+        if(i == 0) {                                // If the first element,
+            top = malloc(sizeof(REGTYPE));          // Memory allocated for the 'top' element
+            *pNr = rand() % 101;                    // Value of nr is reassigned
+            top->number = *pNr;                     // 'top' element's 'number' variable is set to a random number
+            top->next = NULL;                       // 'top' element's 'next' pointer points to NULL
+            old = top;                              // old pointer of type REGTYPE points to the 'top' element
+        } else if(i == MAX) {                       // If the last element
+            item = malloc(sizeof(REGTYPE));         // Memory allocated for 'item' element
+            *pNr = rand() % 101;                    // Random number generated
+            item->number = *pNr;                    // 'number' variable value set to random number
+            item->prev = old;                       // 'prev' pointer points to 'old' element
+        } else {                                    // If it is any element in between,
+            item = malloc(sizeof(REGTYPE));         // Memory allocated for the 'item' element
+            *pNr = rand() % 101;                    // Random number assigned to 'nr' variable
+            item->number = *pNr;                    // 'number' value is set to a random number
+            item->prev = old;                       // 'prev' pointer points to 'old' element
+            item->next = NULL;                      // 'next' pointer points to NULL as the next element is yet to be created
+            old->next = item;                       // 'next' pointer of the old element points to the 'item' just now created
+            old = item;
+        }
     }
-
+    
+    return (top);               // Returns the first element of the linked list
 }
 
-return(top);
-}
+//========================================================== 
 
-//==========================================================
-REGTYPE* add_first(REGTYPE* temp, int data){
+/*
+The method below creates a new element of REGTYPE, and sets the first
+linked list element to the new element created. 
 
-    REGTYPE *newNode = malloc(sizeof(REGTYPE)); // creating a new dynamic memory allocation
-    
-    newNode->number = data; // the newNode points to number, it gets assigned the data value
-    newNode->next = temp; // newNode points to next, it holds the previous first entry
-    newNode->prev = NULL; // newNode points to previous, which is a NULL value
-    temp->prev = newNode; // the the old first value points to previous, which holds the new new first entry
-    temp = newNode; // the temp gets assigned the new first value.
-    
-    return (temp); // returns poiinter to the new first entry
+Method takes two parameters - the current first elemet of the linked list, 
+and the data that the new element will have
+*/
+
+REGTYPE *add_first(REGTYPE *temp, int data) {
+    REGTYPE *newNode = malloc(sizeof(REGTYPE));             // Allocates memory for the new element
+    newNode->number = data;                                 // New element's 'number' is set to the value of the second parameter
+    newNode->next = temp;                                   // 'next' pointer points to the 'temp', which is the previous first element
+    temp->prev = newNode;                                   // The previous first element's 'prev' points to the new first element
+
+    return newNode;             // Returns the new element
 }
