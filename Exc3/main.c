@@ -127,7 +127,14 @@ The input values are stored in Person struct. The record is appended in the file
 fwrite() method, then we cose the scanner*/
 void append_file(PERSON *inrecord){
 
-    FILE *file = fopen("personRecord.bin","ab"); //open the existing binanry file in appeand mode
+    FILE *file;
+
+    if ((file = fopen("personRecord.bin","rb")) == NULL) {
+        printf("Error! File not found.\n");
+        exit(0);
+    }
+    
+    file = fopen("personRecord.bin","ab"); //open the existing binanry file in appeand mode
     printf("*************************************************\n");
     *inrecord = input_record(); //initializing the increcord with user input
 
@@ -146,8 +153,14 @@ void search_by_firstname(char *name){
     PERSON person; //the variable holds the data type of person
     int personFound = 0; //initializing the variable to see if we found a match
     int personCount = 1; //initiazling the variable to keep count while printing
+    FILE *file;
 
-    FILE *file = fopen("personRecord.bin","rb"); //oen the file in read mode
+    if ((file = fopen("personRecord.bin","rb")) == NULL) {
+        printf("Error! File not found.\n");
+        exit(0);
+    }
+
+    file = fopen("personRecord.bin","rb"); //oen the file in read mode
     printf("*************************************************\n");
     printf("Enter the first name of the person you want to search : "); //prompt the user to first name
     scanf("%s", name); //stores the user input
@@ -184,6 +197,11 @@ void printfile(void){
 
     FILE *file = fopen("personRecord.bin","rb"); //open the file
     int personCount = 1; //initiazling the variable to keep count while printing
+
+    if (file == NULL) {
+        printf("Error! File not found.\n");
+        exit(0);
+    }
 
     /*The loop keeps reading the record till the end of file, &person is the address where data will be stored,
     the we set how many byte to read in the Person struct, 1 is the number of record per call and lastly the file

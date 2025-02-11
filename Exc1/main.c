@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define MAX 21 // defing max value for string (max 20 command at once)
+#define MAX 100 // defing max value for string (max 20 command at once)
 
 // this method clears buffer after user input
 void clearBuffer (void) {
