@@ -174,6 +174,13 @@ while (progRuning) {
        
         
     }
+
+    if (xCordinate > 100 || yCordinate > 100) // check  if the X or Y coordnate is out of bound
+    {
+        printf("OUT OF BOUND COORDINATE\n"); // printline for error behaviour
+        return 0; // retun value
+    }
+    
     printf("\n"); // print line for spacing
     printf("######-ROBOT_LOCATION-######\n"); // header formating for output
     printDirection(currentDirection); // prints the direction the robot is facing
