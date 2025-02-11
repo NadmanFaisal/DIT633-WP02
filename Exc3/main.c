@@ -1,8 +1,8 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 // -----typedefs -------
 typedef struct {
@@ -41,9 +41,15 @@ According to the user input the 'If Condition' is executed, the if condition cal
 the function according to user prefernce and it executes till the user wants to exit.*/
 while (progRunning) {
 
-    printMenu(); //function calling the menu lists to print
-    scanf("%d", &menuNUm); //stores the user input
-    clearBuffer(); //clears buffer
+    printMenu(); // method to print the menu
+
+    int userInput = scanf("%d", &menuNUm); // read the number input
+    clearBuffer(); // clear buffer
+
+    if (userInput != 1 || menuNUm < 1 || menuNUm > 5) { //checks if the input is a valid number
+        printf("Invalid input! Please enter a number between 1 and 5.\n");
+        continue; // continue to the program
+    }
 
     if (menuNUm == 1) { //if the user types 1, new binanry file create method is called
         write_new_file(&ppost);
@@ -54,7 +60,8 @@ while (progRunning) {
     } else if (menuNUm == 4) { //if the inoput is 4, printfile() method is executed.
         printfile();
     } else if (menuNUm == 5) //finally input 5 to exit the program
-    {
+    {   
+        printf("Exiting the program........");
         progRunning = false; //boolean turns false once user input is 5 and exits the program
         return 0; //return on succeeful execution
     }

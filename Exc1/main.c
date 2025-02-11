@@ -1,8 +1,9 @@
 #include <stdio.h> // header file
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
-#define MAX 100 // defing max value for string (max 20 command at once)
+#define MAX 100 // defing max value for string (max 100 command at once)
 
 // this method clears buffer after user input
 void clearBuffer (void) {
@@ -110,7 +111,7 @@ while (progRuning) {
 
         // the loop runs till user input is out of bound. Once the user input is
         // within the max and mix x-coordinate, it stores the the userinput
-        while ((xCordinate < MIN_CORDINATE) || (xCordinate > MAX_CORDINATE)) {
+        while (((xCordinate < MIN_CORDINATE) || (xCordinate > MAX_CORDINATE)) || !isalpha(xCordinate)) {
 
             printf("Invalid X cordinate. Enter robot starting X cordinate (0-99): \n");
             scanf("%d", &xCordinate); // stores valid user input for x coordinate
@@ -124,7 +125,7 @@ while (progRuning) {
 
         // the loop runs till user input is out of bound. Once the user input is
         // within the max and mix y-coordinate, it stores the the userinput
-        while ((yCordinate < MIN_CORDINATE) || (yCordinate > MAX_CORDINATE) ) {
+        while (((yCordinate < MIN_CORDINATE) || (yCordinate > MAX_CORDINATE) || !isalpha(yCordinate)) ) {
 
             printf("Invalid Y cordinate. Enter robot starting Y cordinate (0-99): \n");
             scanf("%d", &yCordinate); // stores valid user input for y coordinate

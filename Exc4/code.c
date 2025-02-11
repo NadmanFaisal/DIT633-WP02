@@ -1,5 +1,3 @@
-// Source: To convert decimal to hexadecimal value: https://www.geeksforgeeks.org/c-program-for-decimal-to-hexadecimal-conversion/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -37,6 +35,23 @@ int main(int argc, char *argv[]) {
     byte key_pos = atoi(argv[3]);               // The third arguement converted to integer and stored in key_pos.
     byte brake1 = atoi(argv[4]);                // The forth arguement converted to integer and stored in brake1.
     byte brake2 = atoi(argv[5]);                // The fifth arguement converted to integer and stored in brake2.
+
+    if (engine_on < 0 || engine_on > 1) {       // Checks if engine_on is out of bound 
+        printf("Invalid engine arguement.\n");    
+        return(0);
+    } else if (gear_pos > 4 || gear_pos < 0) {  // Checks if gear_pos is out of bound
+        printf("Invalid gear arguement.\n");       
+        return(0);   
+    } else if (key_pos > 2 || key_pos < 0) {    // Checks if key_pos is out of bound
+        printf("Invalid key arguement.\n");       
+        return(0);
+    } else if (brake1 > 1 || brake1 < 0) {      // Checks if brake1 is out of bound
+        printf("Invalid brake1 arguement.\n");
+        return(0);
+    } else if (brake2 > 1 || brake2 < 0) {      // Checks if brake2 is out of bound
+        printf("Invalid brake2 arguement.\n");
+        return(0);
+    }
 
     printf("engine_on: %d\n", engine_on);       // The number for engine_on printed
     printf("gear_pos: %d\n", gear_pos);         // The number for gear_pos printed
@@ -87,3 +102,4 @@ int main(int argc, char *argv[]) {
     printf("\n");                       // Extra line to accomodate space for readability.
     return 0;                           // Program returns 0.
 }
+// Source: To convert decimal to hexadecimal value: https://www.geeksforgeeks.org/c-program-for-decimal-to-hexadecimal-conversion/
