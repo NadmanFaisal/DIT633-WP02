@@ -15,13 +15,13 @@ Then, the last bits are extracted, and masked to the destination, while
 shifting the destination to the left to keep accomodating for more of the
 required btis
 */
-void unpackBits(int *destination, int *valueToShift, int shiftingValue, int numberOfBits) {
+void unpackBits(byte *destination, byte *valueToShift, int shiftingValue, int numberOfBits) {
     *valueToShift = *valueToShift >> shiftingValue;         // Value shifted to the right by the shifting value specified
-    int decimalCopy = *valueToShift;                        // copy of the valueToShift made to back track at the end    
+    byte decimalCopy = *valueToShift;                       // copy of the valueToShift made to back track at the end    
 
     for(int i = numberOfBits; i > 0; i--) {                 // Looped through as many times as specified to extract bits
         decimalCopy = decimalCopy >> (i - 1);               // The first relevant bit shifted to the absolute end
-        int extractedBit = decimalCopy & 1;                 // The bit is then extracted
+        byte extractedBit = decimalCopy & 1;                 // The bit is then extracted
         *destination = *destination | extractedBit;         // The destination is then masked by the extracted bit
         if(i != 1) {                                        // destination bits keep shifting untill the last bit is extracted
             *destination = *destination << 1;               // destination bits keep shifting to accomodate for new bits
@@ -41,17 +41,17 @@ int main(int argc, char *argv[]) {
     }
     
 
-    char *firstChar = argv[1];                                      // The second arguement is stored in a pointer to a char, indicating a string.
-    int decimalNumber = (int)strtol(firstChar, NULL, 16);           // The hexadecimal string is converted to integer.
-    int decimalCopy = decimalNumber;                                // Copy of the decimalNumber variable declared, for bitshifting operations.
+    byte *firstChar = argv[1];                                      // The second arguement is stored in a pointer to a char, indicating a string.
+    byte decimalNumber = (int)strtol(firstChar, NULL, 16);           // The hexadecimal string is converted to integer.
+    byte decimalCopy = decimalNumber;                               // Copy of the decimalNumber variable declared, for bitshifting operations.
 
-    int engineDecimal = 0;              // The variable which will store the int value for engine_on
-    int gearDecimal = 0;                // The variable which will store the int value for gear_pos
-    int keyDecimal = 0;                 // The variable which will store the int value for key_pos
-    int brake1Decimal = 0;              // The variable which will store the int value for brake1
-    int brake2Decimal = 0;              // The variable which will store the int value for brake2
+    byte engineDecimal = 0;              // The variable which will store the int value for engine_on
+    byte gearDecimal = 0;                // The variable which will store the int value for gear_pos
+    byte keyDecimal = 0;                 // The variable which will store the int value for key_pos
+    byte brake1Decimal = 0;              // The variable which will store the int value for brake1
+    byte brake2Decimal = 0;              // The variable which will store the int value for brake2
 
-    printf("%d\n", decimalNumber);      // The decimal number is printed to ensure expected conversion
+    printf("%d\n", decimalNumber);       // The decimal number is printed to ensure expected conversion
 
     // Extract engine_on
     engineDecimal = decimalCopy >> 7;                   // The bits for engine is extracted. Since it is the left most bit, the bits are shifted
