@@ -60,9 +60,10 @@ int main(int argc, char *argv[]) {
     result = result | brake2;           // Bit masking used to insert brake2 bits into result
 
     printf("Result: %d\n", result);     // The resulting integer printed
-    int decimal_Number = result;        
-    int i = 1, j, temp;                 // Declaring a variable 'decimal_number' to 'result' value
-    char hexa_Number[100];              // Array of characters representing string, to store hexadecimal values
+    byte decimal_Number = result;       // Declaring a variable 'decimal_number' to 'result' value
+    byte temp;
+    byte hexa_Number[100];              // Array of characters representing string, to store hexadecimal values
+    int i = 1, j; 
     
     while (decimal_Number != 0) { 
         temp = decimal_Number % 16;     // The decimal number keeps dividing by 16 untill 0
