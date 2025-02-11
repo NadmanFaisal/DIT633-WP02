@@ -101,7 +101,7 @@ REGTYPE* add_first(REGTYPE* temp, int data){
     newNode->number = data; // the newNode points to number, it gets assigned the data value
     newNode->next = temp; // newNode points to next, it holds the previous first entry
     newNode->prev = NULL; // newNode points to previous, which is a NULL value
-    temp->prev = newNode; // the the old first value points to previous, which holds the new new first entry.
+    temp->prev = newNode; // the the old first value points to previous, which holds the new new first entry
     temp = newNode; // the temp gets assigned the new first value.
     
     return (temp); // returns poiinter to the new first entry
